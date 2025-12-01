@@ -18,33 +18,38 @@ const { title, description = "A Project Overlord Blog" } = Astro.props;
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend:wght@100..900&display=swap"
+            rel="stylesheet"
+        />
     </head>
     <body
-        class="bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 antialiased min-h-screen flex flex-col lexend-font"
+        class="bg-zinc-950 text-zinc-100 antialiased min-h-screen flex flex-col lexend-font"
     >
-        <header
-            class="py-6 px-4 md:px-8 border-b border-zinc-200 dark:border-zinc-800"
-        >
+        <header class="py-6 px-4 md:px-8 border-b border-zinc-800">
             <div class="max-w-4xl mx-auto flex justify-between items-center">
-                <a href="/" class="text-xl font-bold tracking-tighter lexend-font"
+                <a
+                    href="/"
+                    class="text-xl font-bold tracking-tighter lexend-font"
                     >Project Overlord</a
                 >
                 <nav>
                     <ul
-                        class="flex gap-6 text-sm font-medium text-zinc-600 dark:text-zinc-400 lexend-font"
+                        class="flex gap-6 text-sm font-medium text-zinc-400 lexend-font"
                     >
                         <li>
                             <a
                                 href="/"
-                                class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-                                >Home</a>
+                                class="hover:text-zinc-100 transition-colors"
+                                >Home</a
+                            >
                         </li>
                         <li>
                             <a
                                 href="/about"
-                                class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-                                >About</a>
+                                class="hover:text-zinc-100 transition-colors"
+                                >About</a
+                            >
                         </li>
                     </ul>
                 </nav>
@@ -58,7 +63,7 @@ const { title, description = "A Project Overlord Blog" } = Astro.props;
         </main>
 
         <footer
-            class="py-8 px-4 md:px-8 border-t border-zinc-200 dark:border-zinc-800 text-center text-sm text-zinc-500"
+            class="py-8 px-4 md:px-8 border-t border-zinc-800 text-center text-sm text-zinc-500"
         >
             <p>
                 &copy; {new Date().getFullYear()} Ricky Marove. All rights reserved.
