@@ -1,0 +1,77 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { supabase } from "../../lib/supabase";
+
+export async function getStaticPaths() {
+    const { data: posts } = await supabase
+        .from("posts")
+        .select("slug")
+        .eq("published", true);
+
+    return (
+        posts?.map((post) => ({
+            params: { slug: post.slug },
+        })) || []
+    );
+}
+
+const { slug } = Astro.params;
+
+const { data: post, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("slug", slug)
+    .eq("published", true)
+    .single();
+
+if (error || !post) {
+    return Astro.redirect("/404");
+}
+---
+
+<Layout title={post.title} description={post.excerpt}>
+    <article class="space-y-8">
+        {
+            post.cover_image && (
+                <div class="aspect-video overflow-hidden rounded-lg">
+                    <img
+                        src={post.cover_image}
+                        alt={post.title}
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+            )
+        }
+
+        <header class="space-y-4">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+                {post.title}
+            </h1>
+            <time
+                datetime={post.published_at}
+                class="block text-zinc-500 text-sm"
+            >
+                {
+                    new Date(post.published_at).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                    })
+                }
+            </time>
+        </header>
+
+        <div class="prose prose-zinc dark:prose-invert max-w-none">
+            <div set:html={post.content} />
+        </div>
+
+        <footer class="pt-8 border-t border-zinc-200 dark:border-zinc-800">
+            <a
+                href="/"
+                class="inline-flex items-center text-sm font-medium hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
+            >
+                ← Back to all posts
+            </a>
+        </footer>
+    </article>
+</Layout>

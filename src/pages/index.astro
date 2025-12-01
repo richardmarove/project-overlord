@@ -1,16 +1,92 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import { supabase } from "../lib/supabase";
 
+const { data: posts, error } = await supabase
+	.from("posts")
+	.select("*")
+	.eq("published", true)
+	.order("published_at", { ascending: false });
+
+if (error) {
+	console.error("Error fetching posts:", error);
+}
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Project Overlord">
+	<div class="space-y-12">
+		<section class="text-center space-y-4">
+			<h1 class="text-4xl md:text-6xl font-bold tracking-tight">
+				Welcome to Project Overlord
+			</h1>
+			<p
+				class="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto"
+			>
+				Minimalist thoughts, maximum impact.
+			</p>
+		</section>
+
+		<section class="space-y-8">
+			{
+				posts && posts.length > 0 ? (
+					<div class="grid gap-8">
+						{posts.map((post) => (
+							<article class="group border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
+								{post.cover_image && (
+									<a
+										href={`/posts/${post.slug}`}
+										class="block aspect-video overflow-hidden"
+									>
+										<img
+											src={post.cover_image}
+											alt={post.title}
+											class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+										/>
+									</a>
+								)}
+								<div class="p-6 space-y-3">
+									<a
+										href={`/posts/${post.slug}`}
+										class="block"
+									>
+										<h2 class="text-2xl font-bold group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
+											{post.title}
+										</h2>
+									</a>
+									{post.excerpt && (
+										<p class="text-zinc-600 dark:text-zinc-400">
+											{post.excerpt}
+										</p>
+									)}
+									<div class="flex items-center justify-between text-sm text-zinc-500">
+										<time datetime={post.published_at}>
+											{new Date(
+												post.published_at,
+											).toLocaleDateString("en-US", {
+												year: "numeric",
+												month: "long",
+												day: "numeric",
+											})}
+										</time>
+										<a
+											href={`/posts/${post.slug}`}
+											class="font-medium hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+										>
+											Read More →
+										</a>
+									</div>
+								</div>
+							</article>
+						))}
+					</div>
+				) : (
+					<div class="text-center py-12 border border-dashed border-zinc-300 dark:border-zinc-700 rounded-lg">
+						<p class="text-zinc-500">
+							No posts yet. Check back soon!
+						</p>
+					</div>
+				)
+			}
+		</section>
+	</div>
+</Layout>
