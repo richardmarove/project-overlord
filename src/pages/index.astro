@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { supabase } from "../lib/supabase";
+import Silk from "../components/Silk.jsx";
 
 const { data: posts, error } = await supabase
 	.from("posts")
@@ -14,17 +15,43 @@ if (error) {
 ---
 
 <Layout title="Project Overlord">
-	<div class="space-y-12">
-		<section class="text-center space-y-4">
-			<h1 class="text-4xl md:text-6xl font-bold tracking-tight">
-				Welcome to Project Overlord
-			</h1>
-			<p class="text-lg text-zinc-400 max-w-2xl mx-auto">
-				Minimalist thoughts, maximum impact.
-			</p>
+	<div class="flex flex-col">
+		<section
+			class="relative min-h-[70vh] flex items-center justify-center mb-12"
+		>
+			<!-- Silk Background -->
+			<div class="absolute inset-0 w-full h-full bg-zinc-950">
+				<Silk
+					client:only="react"
+					color="#5227ff"
+					speed={20}
+					scale={2}
+					noiseIntensity={1.2}
+				/>
+			</div>
+
+			<!-- Overlay for better text readability -->
+			<div
+				class="absolute inset-0 bg-gradient-to-b from-zinc-950/30 via-zinc-950/50 to-zinc-950"
+			>
+			</div>
+
+			<!-- Hero Content -->
+			<div
+				class="relative z-10 text-center space-y-6 px-4 max-w-4xl mx-auto"
+			>
+				<h1
+					class="text-5xl md:text-7xl font-bold tracking-tight text-zinc-50"
+				>
+					Welcome to Project Overlord
+				</h1>
+				<p class="text-xl md:text-2xl text-zinc-200 max-w-2xl mx-auto">
+					Minimalist thoughts, maximum impact.
+				</p>
+			</div>
 		</section>
 
-		<section class="space-y-8">
+		<section class="space-y-8 max-w-4xl mx-auto w-full px-4 md:px-8 pb-12">
 			{
 				posts && posts.length > 0 ? (
 					<div class="grid gap-8">

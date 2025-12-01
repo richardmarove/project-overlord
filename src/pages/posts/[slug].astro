@@ -30,48 +30,53 @@ if (error || !post) {
 ---
 
 <Layout title={post.title} description={post.excerpt}>
-    <article class="space-y-8">
-        {
-            post.cover_image && (
-                <div class="aspect-video overflow-hidden rounded-lg">
-                    <img
-                        src={post.cover_image}
-                        alt={post.title}
-                        class="w-full h-full object-cover"
-                    />
-                </div>
-            )
-        }
+    <div class="max-w-4xl mx-auto w-full px-4 md:px-8 py-12">
+        <article class="space-y-8">
+            {
+                post.cover_image && (
+                    <div class="aspect-video overflow-hidden rounded-lg">
+                        <img
+                            src={post.cover_image}
+                            alt={post.title}
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                )
+            }
 
-        <header class="space-y-4">
-            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
-                {post.title}
-            </h1>
-            <time
-                datetime={post.published_at}
-                class="block text-zinc-500 text-sm"
-            >
-                {
-                    new Date(post.published_at).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                    })
-                }
-            </time>
-        </header>
+            <header class="space-y-4">
+                <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+                    {post.title}
+                </h1>
+                <time
+                    datetime={post.published_at}
+                    class="block text-zinc-500 text-sm"
+                >
+                    {
+                        new Date(post.published_at).toLocaleDateString(
+                            "en-US",
+                            {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            },
+                        )
+                    }
+                </time>
+            </header>
 
-        <div class="prose prose-zinc prose-invert max-w-none">
-            <div set:html={post.content} />
-        </div>
+            <div class="prose prose-zinc prose-invert max-w-none">
+                <div set:html={post.content} />
+            </div>
 
-        <footer class="pt-8 border-t border-zinc-800">
-            <a
-                href="/"
-                class="inline-flex items-center text-sm font-medium hover:text-zinc-300 transition-colors"
-            >
-                ← Back to all posts
-            </a>
-        </footer>
-    </article>
+            <footer class="pt-8 border-t border-zinc-800">
+                <a
+                    href="/"
+                    class="inline-flex items-center text-sm font-medium hover:text-zinc-300 transition-colors"
+                >
+                    ← Back to all posts
+                </a>
+            </footer>
+        </article>
+    </div>
 </Layout>

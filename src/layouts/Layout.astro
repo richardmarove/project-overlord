@@ -56,10 +56,8 @@ const { title, description = "A Project Overlord Blog" } = Astro.props;
             </div>
         </header>
 
-        <main class="flex-grow px-4 md:px-8 py-12">
-            <div class="max-w-4xl mx-auto w-full">
-                <slot />
-            </div>
+        <main class="flex-grow">
+            <slot />
         </main>
 
         <footer
