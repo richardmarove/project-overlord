@@ -26,28 +26,32 @@ const { title, description = "A Project Overlord Blog" } = Astro.props;
     <body
         class="bg-zinc-950 text-zinc-100 antialiased min-h-screen flex flex-col lexend-font"
     >
-        <header class="py-6 px-4 md:px-8 border-b border-zinc-800">
-            <div class="max-w-4xl mx-auto flex justify-between items-center">
+        <header
+            class="fixed top-6 left-0 right-0 z-50 flex justify-center px-4"
+        >
+            <div
+                class="flex items-center justify-between w-full max-w-2xl px-6 py-3 bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl"
+            >
                 <a
                     href="/"
-                    class="text-xl font-bold tracking-tighter lexend-font"
+                    class="text-lg font-bold tracking-tight text-white lexend-font"
                     >Project Overlord</a
                 >
                 <nav>
                     <ul
-                        class="flex gap-6 text-sm font-medium text-zinc-400 lexend-font"
+                        class="flex gap-6 text-sm font-medium text-white lexend-font"
                     >
                         <li>
                             <a
                                 href="/"
-                                class="hover:text-zinc-100 transition-colors"
+                                class="hover:text-zinc-300 transition-colors"
                                 >Home</a
                             >
                         </li>
                         <li>
                             <a
                                 href="/about"
-                                class="hover:text-zinc-100 transition-colors"
+                                class="hover:text-zinc-300 transition-colors"
                                 >About</a
                             >
                         </li>
