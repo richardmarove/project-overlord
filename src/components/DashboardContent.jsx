@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import StatCard from './StatCard';
+import {
+    LockOpen, Lock, ScrollText, PencilLine, Trash2, Settings2,
+    File, ClipboardList, ChartSpline, UsersRound, Save, Check,
+    NotebookPen, User, BellRing, Cpu
+} from 'lucide-react';
 
 export default function DashboardContent() {
     const [user, setUser] = useState(null);
@@ -100,15 +105,15 @@ export default function DashboardContent() {
     // Helper function to get icon for activity
     const getActivityIcon = (action) => {
         const iconMap = {
-            'user_login': '🔓',
-            'user_logout': '🔒',
-            'post_created': '📝',
-            'post_updated': '✏️',
-            'post_deleted': '🗑️',
-            'settings_updated': '⚙️',
-            'file_uploaded': '📁',
+            'user_login': <LockOpen className="w-5 h-5" />,
+            'user_logout': <Lock className="w-5 h-5" />,
+            'post_created': <ScrollText className="w-5 h-5" />,
+            'post_updated': <PencilLine className="w-5 h-5" />,
+            'post_deleted': <Trash2 className="w-5 h-5" />,
+            'settings_updated': <Settings2 className="w-5 h-5" />,
+            'file_uploaded': <File className="w-5 h-5" />,
         };
-        return iconMap[action] || '📋';
+        return iconMap[action] || <ClipboardList className="w-5 h-5" />;
     };
 
     // Helper function to format time ago
@@ -169,30 +174,30 @@ export default function DashboardContent() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard
-                    title="Total Views"
-                    value={12847}
-                    icon="📊"
+                    title="Total Posts"
+                    value={0}
+                    icon={<ChartSpline className="w-5 h-5" />}
                     trend="up"
-                    trendValue="12.5%"
+                    trendValue="0%"
+                />
+                <StatCard
+                    title="Total Users"
+                    value={1}
+                    icon={<UsersRound className="w-5 h-5" />}
+                    trend="up"
+                    trendValue="0.1%"
                 />
                 <StatCard
                     title="Active Sessions"
-                    value={342}
-                    icon="👥"
-                    trend="up"
-                    trendValue="8.2%"
-                />
-                <StatCard
-                    title="Storage Used"
-                    value="2.4 GB"
-                    icon="💾"
+                    value={0}
+                    icon={<Save className="w-5 h-5" />}
                     trend="down"
-                    trendValue="3.1%"
+                    trendValue="0%"
                 />
                 <StatCard
-                    title="Success Rate"
-                    value="99.8%"
-                    icon="✅"
+                    title="API Response Time"
+                    value={"123 ms"}
+                    icon={<Check className="w-5 h-5" />}
                     trend="up"
                     trendValue="0.3%"
                 />
@@ -207,16 +212,16 @@ export default function DashboardContent() {
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {[
-                            { icon: '📝', label: 'New Post', color: 'from-blue-500/20 to-blue-600/20' },
-                            { icon: '👤', label: 'Users', color: 'from-purple-500/20 to-purple-600/20' },
-                            { icon: '⚙️', label: 'Settings', color: 'from-zinc-500/20 to-zinc-600/20' },
-                            { icon: '📈', label: 'Analytics', color: 'from-green-500/20 to-green-600/20' },
-                            { icon: '🔔', label: 'Notifications', color: 'from-yellow-500/20 to-yellow-600/20' },
-                            { icon: '📁', label: 'Files', color: 'from-red-500/20 to-red-600/20' },
+                            { icon: <NotebookPen className="w-6 h-6" />, label: 'New Post', color: 'from-blue-500/20 to-blue-600/20' },
+                            { icon: <User className="w-7 h-7" />, label: 'Users', color: 'from-purple-500/20 to-purple-600/20' },
+                            { icon: <Settings2 className="w-7 h-7" />, label: 'Settings', color: 'from-zinc-500/20 to-zinc-600/20' },
+                            { icon: <ChartSpline className='w-7 h-7' />, label: 'Analytics', color: 'from-green-500/20 to-green-600/20' },
+                            { icon: <BellRing className='w-7 h-7' />, label: 'Notifications', color: 'from-yellow-500/20 to-yellow-600/20' },
+                            { icon: <Cpu className='w-7 h-7' />, label: 'System Health', color: 'from-red-500/20 to-red-600/20' },
                         ].map((action, index) => (
                             <button
                                 key={index}
-                                className={`group relative p-6 bg-gradient-to-br ${action.color} backdrop-blur-sm border border-white/10 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105`}
+                                className={`group relative p-6 bg-gradient-to-br ${action.color} backdrop-blur-sm border border-white/10 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 flex flex-col items-center justify-center`}
                             >
                                 <div className="text-3xl mb-2">{action.icon}</div>
                                 <div className="text-sm font-medium text-white">{action.label}</div>
