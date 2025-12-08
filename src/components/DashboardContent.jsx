@@ -212,20 +212,21 @@ export default function DashboardContent() {
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {[
-                            { icon: <NotebookPen className="w-6 h-6" />, label: 'New Post', color: 'from-blue-500/20 to-blue-600/20' },
-                            { icon: <User className="w-7 h-7" />, label: 'Users', color: 'from-purple-500/20 to-purple-600/20' },
-                            { icon: <Settings2 className="w-7 h-7" />, label: 'Settings', color: 'from-zinc-500/20 to-zinc-600/20' },
-                            { icon: <ChartSpline className='w-7 h-7' />, label: 'Analytics', color: 'from-green-500/20 to-green-600/20' },
-                            { icon: <BellRing className='w-7 h-7' />, label: 'Notifications', color: 'from-yellow-500/20 to-yellow-600/20' },
-                            { icon: <Cpu className='w-7 h-7' />, label: 'System Health', color: 'from-red-500/20 to-red-600/20' },
+                            { icon: <NotebookPen className="w-6 h-6" />, label: 'New Post', color: 'from-blue-500/20 to-blue-600/20', href: '/admin/posts/new' },
+                            { icon: <User className="w-7 h-7" />, label: 'Users', color: 'from-purple-500/20 to-purple-600/20', href: '#' },
+                            { icon: <Settings2 className="w-7 h-7" />, label: 'Settings', color: 'from-zinc-500/20 to-zinc-600/20', href: '#' },
+                            { icon: <ChartSpline className='w-7 h-7' />, label: 'Analytics', color: 'from-green-500/20 to-green-600/20', href: '#' },
+                            { icon: <BellRing className='w-7 h-7' />, label: 'Notifications', color: 'from-yellow-500/20 to-yellow-600/20', href: '#' },
+                            { icon: <Cpu className='w-7 h-7' />, label: 'System Health', color: 'from-red-500/20 to-red-600/20', href: '#' },
                         ].map((action, index) => (
-                            <button
+                            <a
                                 key={index}
+                                href={action.href}
                                 className={`group relative p-6 bg-gradient-to-br ${action.color} backdrop-blur-sm border border-white/10 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 flex flex-col items-center justify-center`}
                             >
                                 <div className="text-3xl mb-2">{action.icon}</div>
                                 <div className="text-sm font-medium text-white">{action.label}</div>
-                            </button>
+                            </a>
                         ))}
                     </div>
                 </div>
