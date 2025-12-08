@@ -1,0 +1,36 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import PostEditor from "../../../../components/PostEditor.jsx";
+import Balatro from "../../../../components/Balatro.jsx";
+
+// Disable prerendering for this dynamic route (SSR mode)
+export const prerender = false;
+
+const { id } = Astro.params;
+---
+
+<Layout title="Edit Post - Project Overlord" shouldPadHeader={true}>
+    <div class="relative min-h-screen overflow-hidden">
+        <!-- Background Effect -->
+        <div class="fixed inset-0 w-full h-full bg-zinc-950 -z-10">
+            <Balatro
+                isRotate={true}
+                mouseInteraction={true}
+                pixelFilter={700}
+                spinSpeed={1.5}
+                client:load
+            />
+        </div>
+
+        <!-- Overlay -->
+        <div
+            class="fixed inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/80 to-zinc-950 -z-10"
+        >
+        </div>
+
+        <!-- Post Editor with ID -->
+        <div class="relative z-10">
+            <PostEditor postId={id} client:load />
+        </div>
+    </div>
+</Layout>

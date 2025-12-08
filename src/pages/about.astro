@@ -1,33 +1,78 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Balatro from "../components/Balatro.jsx";
 ---
 
 <Layout
     title="About - Project Overlord"
     description="Learn more about Project Overlord"
-    shouldPadHeader={true}
 >
-    <div class="max-w-4xl mx-auto w-full px-4 md:px-8 py-12">
-        <article class="prose prose-zinc prose-invert max-w-none">
-            <h1>About Project Overlord</h1>
+    <div class="flex flex-col">
+        <section
+            class="relative min-h-[70vh] flex items-center justify-center mb-12"
+        >
+            <!-- Balatro Background -->
+            <div class="absolute inset-0 w-full h-full bg-zinc-950">
+                <Balatro
+                    isRotate={false}
+                    mouseInteraction={true}
+                    pixelFilter={700}
+                    client:load
+                />
+            </div>
 
-            <p class="lead">
-                A minimalistic article site where I criticize many things
-            </p>
+            <!-- Overlay for better text readability -->
+            <div
+                class="absolute inset-0 bg-gradient-to-b from-zinc-950/30 via-zinc-950/50 to-zinc-950"
+            >
+            </div>
 
-            <h2>Tech Stack</h2>
-            <ul>
-                <li>
-                    <strong>Astro</strong> - Fast, content-focused framework
-                </li>
-                <li><strong>React</strong> - Interactive components</li>
-                <li><strong>Tailwind CSS v4</strong> - Modern styling</li>
-                <li>
-                    <strong>Supabase</strong> - PostgreSQL database and APIs
-                </li>
-            </ul>
+            <!-- Hero Content -->
+            <div
+                class="relative z-10 text-center space-y-6 px-4 max-w-4xl mx-auto"
+            >
+                <h1
+                    class="text-5xl md:text-7xl font-bold tracking-tight text-zinc-50"
+                >
+                    About Project Overlord
+                </h1>
+                <p class="text-xl md:text-2xl text-zinc-200 max-w-2xl mx-auto">
+                    A minimalistic article site where I criticize many things
+                </p>
+            </div>
+        </section>
 
-            <h2>God Bless The Maroves</h2>
-        </article>
+        <section class="max-w-4xl mx-auto w-full px-4 md:px-8 pb-12">
+            <article class="prose prose-zinc prose-invert max-w-none">
+                
+                <h2>What Project Overlord <i>Is</i></h2>
+                <p>Well it's not a safe space, not a place for sugarcoating, not a mainstream opinion farm,
+                    not here to please everyone. And definitely isn't a Libertarianist blog. /s
+                </p>
+                
+                <h2>So what do you identify as?</h2>
+                <p>Anyone who knows me, knows that I'm a Muslim with Libertarian values. On the political spectrum
+                    I identify myself as part of the right-wing libertarian movement even though it's not completely
+                    accurate. (Not all right-wing movements are the same btw, stop with that shit.)
+                </p>
+
+                <h2>Why the name "Project Overlord"?</h2>
+                <p>Battle of Normandy. That's literally the only reason.</p>
+
+                <hr class="w-full border-t border-white/20">
+
+                <h2>Tech Stack</h2>
+                <ul>
+                    <li>
+                        <strong>Astro</strong> - Fast, content-focused framework
+                    </li>
+                    <li><strong>React</strong> - Interactive components</li>
+                    <li><strong>Tailwind CSS v4</strong> - Modern styling</li>
+                    <li>
+                        <strong>Supabase</strong> - PostgreSQL database and APIs
+                    </li>
+                </ul>
+            </article>
+        </section>
     </div>
 </Layout>

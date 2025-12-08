@@ -1,11 +1,13 @@
 -- Create the posts table
 CREATE TABLE IF NOT EXISTS posts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  author_id UUID REFERENCES admin_profiles(id) ON DELETE SET NULL,
   slug TEXT NOT NULL UNIQUE,
   title TEXT NOT NULL,
   content TEXT, -- Markdown or HTML content
   excerpt TEXT,
   cover_image TEXT,
+  view_count INTEGER DEFAULT 0,
   published BOOLEAN DEFAULT false,
   published_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT now(),
