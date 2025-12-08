@@ -136,8 +136,12 @@ export default function PostEditor({ postId = undefined }) {
         const postData = {
             ...formData,
             published: publish ? true : formData.published,
-            published_at: publish && !formData.published ? new Date().toISOString() :
-                (originalData?.published_at || null),
+            // Set published_at when:
+            // 1. User clicks Publish AND post wasn't already published
+            // 2. Keep existing published_at if already published
+            published_at: (publish || formData.published)
+                ? (originalData?.published_at || new Date().toISOString())
+                : null,
         };
 
         let result;
