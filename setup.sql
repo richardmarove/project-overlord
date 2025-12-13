@@ -1,3 +1,8 @@
+-- Database Setup
+-- Run `setup.sql` file in Supabase SQL Editor to initialize tables, RLS and storage.
+
+
+
 -- Create the posts table
 CREATE TABLE IF NOT EXISTS posts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -28,7 +33,7 @@ USING (true);
 -- This assumes you will use Supabase Auth and your user is authenticated
 CREATE POLICY "Authenticated users can modify posts" 
 ON posts FOR ALL 
-USING (auth.role() = 'authenticated');
+USING ((select auth.role()) = 'authenticated');
 
 -- Create a storage bucket for post images
 INSERT INTO storage.buckets (id, name, public) 
