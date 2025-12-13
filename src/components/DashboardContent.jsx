@@ -4,7 +4,7 @@ import StatCard from './StatCard';
 import {
     LockOpen, Lock, ScrollText, PencilLine, Trash2, Settings2,
     File, ClipboardList, ChartSpline, UsersRound, Baby, Check,
-    NotebookPen, User, BellRing, Cpu
+    NotebookPen, User, BellRing, Search
 } from 'lucide-react';
 
 export default function DashboardContent() {
@@ -42,7 +42,7 @@ export default function DashboardContent() {
                         .select('*')
                         .eq('user_id', currentUser.id)
                         .order('created_at', { ascending: false })
-                        .limit(10);
+                        .limit(5);
 
                     if (activityError) {
                         console.error('Error fetching activities:', activityError);
@@ -217,7 +217,7 @@ export default function DashboardContent() {
                             { icon: <Settings2 className="w-7 h-7" />, label: 'Settings', color: 'from-zinc-500/20 to-zinc-600/20', href: '#' },
                             { icon: <ChartSpline className='w-7 h-7' />, label: 'Analytics', color: 'from-green-500/20 to-green-600/20', href: '#' },
                             { icon: <BellRing className='w-7 h-7' />, label: 'Notifications', color: 'from-yellow-500/20 to-yellow-600/20', href: '#' },
-                            { icon: <Cpu className='w-7 h-7' />, label: 'System Health', color: 'from-red-500/20 to-red-600/20', href: '#' },
+                            { icon: <Search className='w-7 h-7' />, label: 'Recent Activity', color: 'from-red-500/20 to-red-600/20', href: '/admin/activity' },
                         ].map((action, index) => (
                             <a
                                 key={index}
