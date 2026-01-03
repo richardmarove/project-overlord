@@ -49,8 +49,11 @@ if (error || !post) {
         >
         </div>
 
-        <!-- Article Content -->
-        <div class="relative z-10 max-w-4xl mx-auto w-full px-4 md:px-8 py-12">
+        <!-- Article Content / pt-32 is used when there's no cover image -->
+        <div
+            class={`relative z-10 max-w-4xl mx-auto w-full px-4 md:px-8 pb-12 ${post.cover_image ? "pt-12" : "pt-32"}`} 
+        >
+        
             <article class="space-y-8">
                 {
                     post.cover_image && (
