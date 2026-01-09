@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { generateSlug } from './postUtils';
+import { vi } from 'vitest';
+
+vi.mock('./supabase');
 
 describe('generateSlug', () => {
     it('should convert title to lowercase', () => {
