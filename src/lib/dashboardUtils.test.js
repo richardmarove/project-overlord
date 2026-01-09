@@ -41,7 +41,7 @@ describe('formatTimeAgo', () => {
     it('should return date string for more than 7 days', () => {
         const now = new Date();
         const date = new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000);
-        // We compare the date string format
+        // compare the date string format
         expect(formatTimeAgo(date.toISOString())).toBe(date.toLocaleDateString());
     });
 });
