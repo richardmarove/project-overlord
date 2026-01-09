@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { formatActivityAction, formatTimeAgo } from '../lib/dashboardUtils';
 import StatCard from './StatCard';
 import {
     LockOpen, Lock, ScrollText, PencilLine, Trash2, Settings2,
@@ -112,20 +113,6 @@ export default function DashboardContent() {
         }
     };
 
-    // Helper function to format activity action for display
-    const formatActivityAction = (activity) => {
-        const actionMap = {
-            'user_login': 'Logged in',
-            'user_logout': 'Logged out',
-            'post_created': `Created post`,
-            'post_updated': `Updated post`,
-            'post_deleted': `Deleted post`,
-            'settings_updated': 'Updated settings',
-            'file_uploaded': 'Uploaded file',
-        };
-        return actionMap[activity.action] || activity.action;
-    };
-
     // Helper function to get icon for activity
     const getActivityIcon = (action) => {
         const iconMap = {
@@ -140,21 +127,7 @@ export default function DashboardContent() {
         return iconMap[action] || <ClipboardList className="w-5 h-5" />;
     };
 
-    // Helper function to format time ago
-    const formatTimeAgo = (dateString) => {
-        const date = new Date(dateString);
-        const now = new Date();
-        const seconds = Math.floor((now - date) / 1000);
 
-        if (seconds < 60) return 'just now';
-        const minutes = Math.floor(seconds / 60);
-        if (minutes < 60) return `${minutes} min ago`;
-        const hours = Math.floor(minutes / 60);
-        if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-        const days = Math.floor(hours / 24);
-        if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
-        return date.toLocaleDateString();
-    };
 
     if (loading) {
         return (
