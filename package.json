@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "jsdom": "^27.4.0",
+    "supabase": "^2.72.2",
     "vitest": "^4.0.16"
   }
 }
