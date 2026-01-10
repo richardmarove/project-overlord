@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { generateSlug } from './postUtils';
 import { vi } from 'vitest';
 
-vi.mock('./supabase');
+vi.mock('./supabase'); // automatically loads the mock file in src/lib/__mocks__/supabase.ts
 
 describe('generateSlug', () => {
     it('should convert title to lowercase', () => {

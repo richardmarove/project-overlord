@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { formatActivityAction, formatTimeAgo } from './dashboardUtils';
 
+// We dont vi.mock('./supabase') supabase here because src/lib/dashboardUtils.js doesn't import it
+
 describe('formatActivityAction', () => {
     it('should return correct string for known actions', () => {
         expect(formatActivityAction({ action: 'user_login' })).toBe('Logged in');
