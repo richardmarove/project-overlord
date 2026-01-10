@@ -71,22 +71,49 @@ ALTER TABLE public.admin_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.activity_logs ENABLE ROW LEVEL SECURITY;
 
+-- Helper Functions
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.admin_profiles
+    WHERE id = auth.uid() AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+CREATE OR REPLACE FUNCTION public.is_staff()
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.admin_profiles
+    WHERE id = auth.uid() AND role IN ('admin', 'editor', 'viewer')
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+CREATE OR REPLACE FUNCTION public.is_editor()
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.admin_profiles
+    WHERE id = auth.uid() AND role IN ('admin', 'editor')
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
 -- Post Policies
 CREATE POLICY "Public can view published posts" ON public.posts 
   FOR SELECT USING (published = true);
 
 CREATE POLICY "Staff can view all posts" ON public.posts 
   FOR SELECT USING (
-    auth.role() = 'authenticated' AND (
-      EXISTS (SELECT 1 FROM public.admin_profiles WHERE id = auth.uid() AND role IN ('admin', 'editor', 'viewer'))
-    )
+    auth.role() = 'authenticated' AND public.is_staff()
   );
 
 CREATE POLICY "Staff can modify posts" ON public.posts 
   USING (
-    auth.role() = 'authenticated' AND (
-      EXISTS (SELECT 1 FROM public.admin_profiles WHERE id = auth.uid() AND role IN ('admin', 'editor'))
-    )
+    auth.role() = 'authenticated' AND public.is_editor()
   );
 
 -- Profile Policies
@@ -95,9 +122,7 @@ CREATE POLICY "Users can view own profile" ON public.admin_profiles
 
 CREATE POLICY "Admins can view all profiles" ON public.admin_profiles 
   FOR SELECT USING (
-    auth.role() = 'authenticated' AND (
-      EXISTS (SELECT 1 FROM public.admin_profiles WHERE id = auth.uid() AND role = 'admin')
-    )
+    auth.role() = 'authenticated' AND public.is_admin()
   );
 
 CREATE POLICY "Users can update own profile" ON public.admin_profiles 
@@ -112,7 +137,5 @@ CREATE POLICY "Users can view own logs" ON public.activity_logs
 
 CREATE POLICY "Admins can view all logs" ON public.activity_logs 
   FOR SELECT USING (
-    auth.role() = 'authenticated' AND (
-      EXISTS (SELECT 1 FROM public.admin_profiles WHERE id = auth.uid() AND role = 'admin')
-    )
+    auth.role() = 'authenticated' AND public.is_admin()
   );
