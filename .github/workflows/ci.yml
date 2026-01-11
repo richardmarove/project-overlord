@@ -8,6 +8,7 @@ on:
 
 jobs:
   lint:
+    name: "Linting & Formatting"
     runs-on: ubuntu-latest
 
     steps:
@@ -29,6 +30,7 @@ jobs:
       run: npm run format:check
 
   test:
+    name: "Unit Tests (Vitest)"
     runs-on: ubuntu-latest
 
     steps:
@@ -47,6 +49,7 @@ jobs:
       run: npm test
 
   build:
+    name: "Production Build Check"
     runs-on: ubuntu-latest
 
     steps:
