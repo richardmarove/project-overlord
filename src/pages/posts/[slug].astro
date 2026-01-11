@@ -1,108 +1,90 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { supabase } from "../../lib/supabase";
-import Balatro from "../../components/Balatro.jsx";
+import Layout from '../../layouts/Layout.astro';
+import { supabase } from '../../lib/supabase';
+import Balatro from '../../components/Balatro.jsx';
 
 export async function getStaticPaths() {
-    const { data: posts } = await supabase
-        .from("posts")
-        .select("slug")
-        .eq("published", true);
+  const { data: posts } = await supabase.from('posts').select('slug').eq('published', true);
 
-    return (
-        posts?.map((post) => ({
-            params: { slug: post.slug },
-        })) || []
-    );
+  return (
+    posts?.map((post) => ({
+      params: { slug: post.slug },
+    })) || []
+  );
 }
 
 const { slug } = Astro.params;
 
 const { data: post, error } = await supabase
-    .from("posts")
-    .select("*")
-    .eq("slug", slug)
-    .eq("published", true)
-    .single();
+  .from('posts')
+  .select('*')
+  .eq('slug', slug)
+  .eq('published', true)
+  .single();
 
 if (error || !post) {
-    return Astro.redirect("/404");
+  return Astro.redirect('/404');
 }
 ---
 
 <Layout title={post.title} description={post.excerpt}>
-    <div class="relative min-h-screen overflow-hidden">
-        <!-- Spinning Background Effect -->
-        <div class="fixed inset-0 w-full h-full bg-zinc-950 -z-10">
-            <Balatro
-                isRotate={true}
-                mouseInteraction={true}
-                pixelFilter={700}
-                spinSpeed={1.5}
-                client:load
-            />
-        </div>
-
-        <!-- Overlay for better text readability -->
-        <div
-            class="fixed inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/80 to-zinc-950 -z-10"
-        >
-        </div>
-
-        <!-- Article Content / pt-32 is used when there's no cover image -->
-        <div
-            class={`relative z-10 max-w-4xl mx-auto w-full px-4 md:px-8 pb-12 ${post.cover_image ? "pt-12" : "pt-32"}`} 
-        >
-        
-            <article class="space-y-8">
-                {
-                    post.cover_image && (
-                        <div class="aspect-video overflow-hidden rounded-lg">
-                            <img
-                                src={post.cover_image}
-                                alt={post.title}
-                                class="w-full h-full object-cover"
-                            />
-                        </div>
-                    )
-                }
-
-                <header class="space-y-4">
-                    <h1
-                        class="text-4xl md:text-5xl font-bold tracking-tight text-white"
-                    >
-                        {post.title}
-                    </h1>
-                    <time
-                        datetime={post.published_at}
-                        class="block text-zinc-400 text-sm"
-                    >
-                        {
-                            new Date(post.published_at).toLocaleDateString(
-                                "en-US",
-                                {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                },
-                            )
-                        }
-                    </time>
-                </header>
-
-                <div class="prose prose-zinc prose-invert max-w-none">
-                    <div set:html={post.content} />
-                </div>
-
-                <footer class="pt-8 border-t border-zinc-800">
-                    <a
-                        href="/"
-                        class="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-zinc-200 transition-colors"
-                    >
-                        ← Back to all posts
-                    </a>
-                </footer>
-            </article>
-        </div>
+  <div class="relative min-h-screen overflow-hidden">
+    <!-- Spinning Background Effect -->
+    <div class="fixed inset-0 w-full h-full bg-zinc-950 -z-10">
+      <Balatro
+        isRotate={true}
+        mouseInteraction={true}
+        pixelFilter={700}
+        spinSpeed={1.5}
+        client:load
+      />
     </div>
+
+    <!-- Overlay for better text readability -->
+    <div class="fixed inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/80 to-zinc-950 -z-10">
+    </div>
+
+    <!-- Article Content / pt-32 is used when there's no cover image -->
+    <div
+      class={`relative z-10 max-w-4xl mx-auto w-full px-4 md:px-8 pb-12 ${post.cover_image ? 'pt-12' : 'pt-32'}`}
+    >
+      <article class="space-y-8">
+        {
+          post.cover_image && (
+            <div class="aspect-video overflow-hidden rounded-lg">
+              <img src={post.cover_image} alt={post.title} class="w-full h-full object-cover" />
+            </div>
+          )
+        }
+
+        <header class="space-y-4">
+          <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-white">
+            {post.title}
+          </h1>
+          <time datetime={post.published_at} class="block text-zinc-400 text-sm">
+            {
+              new Date(post.published_at).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+            }
+          </time>
+        </header>
+
+        <div class="prose prose-zinc prose-invert max-w-none">
+          <div set:html={post.content} />
+        </div>
+
+        <footer class="pt-8 border-t border-zinc-800">
+          <a
+            href="/"
+            class="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-zinc-200 transition-colors"
+          >
+            ← Back to all posts
+          </a>
+        </footer>
+      </article>
+    </div>
+  </div>
 </Layout>

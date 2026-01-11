@@ -1,116 +1,89 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { supabase } from "../lib/supabase";
-import Balatro from "../components/Balatro.jsx";
+import Layout from '../layouts/Layout.astro';
+import { supabase } from '../lib/supabase';
+import Balatro from '../components/Balatro.jsx';
 
 const { data: posts, error } = await supabase
-	.from("posts")
-	.select("*")
-	.eq("published", true)
-	.order("published_at", { ascending: false });
+  .from('posts')
+  .select('*')
+  .eq('published', true)
+  .order('published_at', { ascending: false });
 
 if (error) {
-	console.error("Error fetching posts:", error);
+  console.error('Error fetching posts:', error);
 }
 ---
 
 <Layout title="Project Overlord">
-	<div class="flex flex-col">
-		<section
-			class="relative min-h-[70vh] flex items-center justify-center mb-12"
-		>
-			<!-- Silk Background -->
-			<div class="absolute inset-0 w-full h-full bg-zinc-950">
-				<Balatro
-					isRotate={false}
-					mouseInteraction={true}
-					pixelFilter={700}
-					client:load
-				/>
-			</div>
+  <div class="flex flex-col">
+    <section class="relative min-h-[70vh] flex items-center justify-center mb-12">
+      <!-- Silk Background -->
+      <div class="absolute inset-0 w-full h-full bg-zinc-950">
+        <Balatro isRotate={false} mouseInteraction={true} pixelFilter={700} client:load />
+      </div>
 
-			<!-- Overlay for better text readability -->
-			<div
-				class="absolute inset-0 bg-gradient-to-b from-zinc-950/30 via-zinc-950/50 to-zinc-950"
-			>
-			</div>
+      <!-- Overlay for better text readability -->
+      <div class="absolute inset-0 bg-gradient-to-b from-zinc-950/30 via-zinc-950/50 to-zinc-950">
+      </div>
 
-			<!-- Hero Content -->
-			<div
-				class="relative z-10 text-center space-y-6 px-4 max-w-4xl mx-auto"
-			>
-				<h1
-					class="text-5xl md:text-7xl font-bold tracking-tight text-zinc-50"
-				>
-					Welcome to Project Overlord
-				</h1>
-				<p class="text-xl md:text-2xl text-zinc-200 max-w-2xl mx-auto">
-					Minimalist thoughts, maximum impact.
-				</p>
-			</div>
-		</section>
+      <!-- Hero Content -->
+      <div class="relative z-10 text-center space-y-6 px-4 max-w-4xl mx-auto">
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-zinc-50">
+          Welcome to Project Overlord
+        </h1>
+        <p class="text-xl md:text-2xl text-zinc-200 max-w-2xl mx-auto">
+          Minimalist thoughts, maximum impact.
+        </p>
+      </div>
+    </section>
 
-		<section class="space-y-8 max-w-4xl mx-auto w-full px-4 md:px-8 pb-12">
-			{
-				posts && posts.length > 0 ? (
-					<div class="grid gap-8">
-						{posts.map((post) => (
-							<article class="group border border-zinc-800 rounded-lg overflow-hidden hover:border-zinc-700 transition-colors">
-								{post.cover_image && (
-									<a
-										href={`/posts/${post.slug}`}
-										class="block aspect-video overflow-hidden"
-									>
-										<img
-											src={post.cover_image}
-											alt={post.title}
-											class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-										/>
-									</a>
-								)}
-								<div class="p-6 space-y-3">
-									<a
-										href={`/posts/${post.slug}`}
-										class="block"
-									>
-										<h2 class="text-2xl font-bold group-hover:text-zinc-300 transition-colors">
-											{post.title}
-										</h2>
-									</a>
-									{post.excerpt && (
-										<p class="text-zinc-400">
-											{post.excerpt}
-										</p>
-									)}
-									<div class="flex items-center justify-between text-sm text-zinc-500">
-										<time datetime={post.published_at}>
-											{new Date(
-												post.published_at,
-											).toLocaleDateString("en-US", {
-												year: "numeric",
-												month: "long",
-												day: "numeric",
-											})}
-										</time>
-										<a
-											href={`/posts/${post.slug}`}
-											class="font-medium hover:text-zinc-100 transition-colors"
-										>
-											Read More →
-										</a>
-									</div>
-								</div>
-							</article>
-						))}
-					</div>
-				) : (
-					<div class="text-center py-12 border border-dashed border-zinc-700 rounded-lg">
-						<p class="text-zinc-500">
-							No posts yet. Check back soon!
-						</p>
-					</div>
-				)
-			}
-		</section>
-	</div>
+    <section class="space-y-8 max-w-4xl mx-auto w-full px-4 md:px-8 pb-12">
+      {
+        posts && posts.length > 0 ? (
+          <div class="grid gap-8">
+            {posts.map((post) => (
+              <article class="group border border-zinc-800 rounded-lg overflow-hidden hover:border-zinc-700 transition-colors">
+                {post.cover_image && (
+                  <a href={`/posts/${post.slug}`} class="block aspect-video overflow-hidden">
+                    <img
+                      src={post.cover_image}
+                      alt={post.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </a>
+                )}
+                <div class="p-6 space-y-3">
+                  <a href={`/posts/${post.slug}`} class="block">
+                    <h2 class="text-2xl font-bold group-hover:text-zinc-300 transition-colors">
+                      {post.title}
+                    </h2>
+                  </a>
+                  {post.excerpt && <p class="text-zinc-400">{post.excerpt}</p>}
+                  <div class="flex items-center justify-between text-sm text-zinc-500">
+                    <time datetime={post.published_at}>
+                      {new Date(post.published_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </time>
+                    <a
+                      href={`/posts/${post.slug}`}
+                      class="font-medium hover:text-zinc-100 transition-colors"
+                    >
+                      Read More →
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-12 border border-dashed border-zinc-700 rounded-lg">
+            <p class="text-zinc-500">No posts yet. Check back soon!</p>
+          </div>
+        )
+      }
+    </section>
+  </div>
 </Layout>
