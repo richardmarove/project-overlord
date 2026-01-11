@@ -63,4 +63,9 @@ jobs:
 
     - name: Build
       run: npm run build
+      env:
+        # These are dummy values to satisfy the runtime check in src/lib/supabase.ts during build.
+        # The build step only verifies compilation and does not need real credentials.
+        PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+        PUBLIC_SUPABASE_ANON_KEY: dummy-key-for-build-verification
 
