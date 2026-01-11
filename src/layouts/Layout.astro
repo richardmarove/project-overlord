@@ -1,112 +1,85 @@
 ---
-import "../styles/global.css";
+import '../styles/global.css';
 
 interface Props {
-    title: string;
-    description?: string;
-    shouldPadHeader?: boolean;
+  title: string;
+  description?: string;
+  shouldPadHeader?: boolean;
 }
 
-const {
-    title,
-    description = "A Project Overlord Blog",
-    shouldPadHeader = false,
-} = Astro.props;
+const { title, description = 'A Project Overlord Blog', shouldPadHeader = false } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" class="scroll-smooth">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="description" content={description} />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="generator" content={Astro.generator} />
-        <title>{title}</title>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend:wght@100..900&display=swap"
-            rel="stylesheet"
-        />
-    </head>
-    <body
-        class="bg-zinc-950 text-zinc-100 antialiased min-h-screen flex flex-col lexend-font"
-    >
-        <header
-            class="fixed top-6 left-0 right-0 z-50 flex justify-center px-4"
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-zinc-950 text-zinc-100 antialiased min-h-screen flex flex-col lexend-font">
+    <header class="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
+      <div
+        class="flex items-center justify-between w-full max-w-2xl px-6 py-3 bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl"
+      >
+        <a href="/" class="text-lg font-bold tracking-tight text-white lexend-font"
+          >Project Overlord</a
         >
-            <div
-                class="flex items-center justify-between w-full max-w-2xl px-6 py-3 bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl"
-            >
-                <a
-                    href="/"
-                    class="text-lg font-bold tracking-tight text-white lexend-font"
-                    >Project Overlord</a
-                >
-                <nav>
-                    <ul
-                        class="flex gap-6 text-sm font-medium text-white lexend-font"
-                    >
-                        <li>
-                            <a
-                                href="/"
-                                class="hover:text-zinc-300 transition-colors"
-                                >Home</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                href="/about"
-                                class="hover:text-zinc-300 transition-colors"
-                                >About</a
-                            >
-                        </li>
-                        <li id="dashboard-nav-item" style="display: none;">
-                            <a
-                                href="/admin"
-                                class="hover:text-zinc-300 transition-colors"
-                                >Dashboard</a
-                            >
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
+        <nav>
+          <ul class="flex gap-6 text-sm font-medium text-white lexend-font">
+            <li>
+              <a href="/" class="hover:text-zinc-300 transition-colors">Home</a>
+            </li>
+            <li>
+              <a href="/about" class="hover:text-zinc-300 transition-colors">About</a>
+            </li>
+            <li id="dashboard-nav-item" style="display: none;">
+              <a href="/admin" class="hover:text-zinc-300 transition-colors">Dashboard</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-        <main class={`flex-grow ${shouldPadHeader ? "pt-32" : ""}`}>
-            <slot />
-        </main>
+    <main class={`flex-grow ${shouldPadHeader ? 'pt-32' : ''}`}>
+      <slot />
+    </main>
 
-        <footer
-            class="py-8 px-4 md:px-8 border-t border-zinc-800 text-center text-sm text-zinc-500"
-        >
-            <p>
-                &copy; {new Date().getFullYear()} Ricky Marove. All rights reserved.
-            </p>
-        </footer>
+    <footer class="py-8 px-4 md:px-8 border-t border-zinc-800 text-center text-sm text-zinc-500">
+      <p>
+        &copy; {new Date().getFullYear()} Ricky Marove. All rights reserved.
+      </p>
+    </footer>
 
-        <script>
-            import { supabase } from "../lib/supabase";
+    <script>
+      import { supabase } from '../lib/supabase';
 
-            // Check auth state and show/hide dashboard link
-            async function updateNavigation() {
-                const {
-                    data: { session },
-                } = await supabase.auth.getSession();
-                const dashboardNavItem =
-                    document.getElementById("dashboard-nav-item");
+      // Check auth state and show/hide dashboard link
+      async function updateNavigation() {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        const dashboardNavItem = document.getElementById('dashboard-nav-item');
 
-                if (dashboardNavItem) {
-                    dashboardNavItem.style.display = session ? "block" : "none";
-                }
-            }
+        if (dashboardNavItem) {
+          dashboardNavItem.style.display = session ? 'block' : 'none';
+        }
+      }
 
-            // Update on page load
-            updateNavigation();
+      // Update on page load
+      updateNavigation();
 
-            // Update on auth state change
-            supabase.auth.onAuthStateChange(() => {
-                updateNavigation();
-            });
-        </script>
-    </body>
+      // Update on auth state change
+      supabase.auth.onAuthStateChange(() => {
+        updateNavigation();
+      });
+    </script>
+  </body>
 </html>

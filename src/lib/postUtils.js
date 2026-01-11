@@ -11,15 +11,15 @@ import { supabase } from './supabase';
  * @returns {string} - URL-friendly slug
  */
 export function generateSlug(title) {
-    if (!title) return '';
+  if (!title) return '';
 
-    return title
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, '') // Remove special characters
-        .replace(/\s+/g, '-')     // Replace spaces with hyphens
-        .replace(/-+/g, '-')      // Replace multiple hyphens with single
-        .replace(/^-|-$/g, '');   // Remove leading/trailing hyphens
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single
+    .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
 }
 
 /**
@@ -29,23 +29,20 @@ export function generateSlug(title) {
  * @returns {Promise<boolean>} - True if slug is unique
  */
 export async function isSlugUnique(slug, excludeId = null) {
-    let query = supabase
-        .from('posts')
-        .select('id')
-        .eq('slug', slug);
+  let query = supabase.from('posts').select('id').eq('slug', slug);
 
-    if (excludeId) {
-        query = query.neq('id', excludeId);
-    }
+  if (excludeId) {
+    query = query.neq('id', excludeId);
+  }
 
-    const { data, error } = await query;
+  const { data, error } = await query;
 
-    if (error) {
-        console.error('Error checking slug uniqueness:', error);
-        return false;
-    }
+  if (error) {
+    console.error('Error checking slug uniqueness:', error);
+    return false;
+  }
 
-    return data.length === 0;
+  return data.length === 0;
 }
 
 /**
@@ -54,34 +51,38 @@ export async function isSlugUnique(slug, excludeId = null) {
  * @returns {Promise<{success: boolean, data?: object, error?: string}>}
  */
 export async function createPost(postData) {
-    try {
-        const { data: { user } } = await supabase.auth.getUser();
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-        if (!user) {
-            return { success: false, error: 'Not authenticated' };
-        }
-
-        const { data, error } = await supabase
-            .from('posts')
-            .insert([{
-                ...postData,
-                author_id: user.id,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-            }])
-            .select()
-            .single();
-
-        if (error) {
-            console.error('Error creating post:', error);
-            return { success: false, error: error.message };
-        }
-
-        return { success: true, data };
-    } catch (error) {
-        console.error('Error creating post:', error);
-        return { success: false, error: error.message };
+    if (!user) {
+      return { success: false, error: 'Not authenticated' };
     }
+
+    const { data, error } = await supabase
+      .from('posts')
+      .insert([
+        {
+          ...postData,
+          author_id: user.id,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating post:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error creating post:', error);
+    return { success: false, error: error.message };
+  }
 }
 
 /**
@@ -91,27 +92,27 @@ export async function createPost(postData) {
  * @returns {Promise<{success: boolean, data?: object, error?: string}>}
  */
 export async function updatePost(id, postData) {
-    try {
-        const { data, error } = await supabase
-            .from('posts')
-            .update({
-                ...postData,
-                updated_at: new Date().toISOString(),
-            })
-            .eq('id', id)
-            .select()
-            .single();
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .update({
+        ...postData,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select()
+      .single();
 
-        if (error) {
-            console.error('Error updating post:', error);
-            return { success: false, error: error.message };
-        }
-
-        return { success: true, data };
-    } catch (error) {
-        console.error('Error updating post:', error);
-        return { success: false, error: error.message };
+    if (error) {
+      console.error('Error updating post:', error);
+      return { success: false, error: error.message };
     }
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error updating post:', error);
+    return { success: false, error: error.message };
+  }
 }
 
 /**
@@ -120,23 +121,19 @@ export async function updatePost(id, postData) {
  * @returns {Promise<{success: boolean, data?: object, error?: string}>}
  */
 export async function getPostById(id) {
-    try {
-        const { data, error } = await supabase
-            .from('posts')
-            .select('*')
-            .eq('id', id)
-            .single();
+  try {
+    const { data, error } = await supabase.from('posts').select('*').eq('id', id).single();
 
-        if (error) {
-            console.error('Error fetching post:', error);
-            return { success: false, error: error.message };
-        }
-
-        return { success: true, data };
-    } catch (error) {
-        console.error('Error fetching post:', error);
-        return { success: false, error: error.message };
+    if (error) {
+      console.error('Error fetching post:', error);
+      return { success: false, error: error.message };
     }
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return { success: false, error: error.message };
+  }
 }
 
 /**
@@ -145,33 +142,31 @@ export async function getPostById(id) {
  * @returns {Promise<{success: boolean, url?: string, error?: string}>}
  */
 export async function uploadCoverImage(file) {
-    try {
-        if (!file) {
-            return { success: false, error: 'No file provided' };
-        }
-
-        // Generate unique filename
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`; // Randomized file name
-        const filePath = `covers/${fileName}`; // Path in the Supabase Storage (means this is not locally stored)
-
-        const { error: uploadError } = await supabase.storage
-            .from('images')
-            .upload(filePath, file);
-
-        if (uploadError) {
-            console.error('Error uploading image:', uploadError);
-            return { success: false, error: uploadError.message };
-        }
-
-        // Get public URL
-        const { data: { publicUrl } } = supabase.storage
-            .from('images')
-            .getPublicUrl(filePath);
-
-        return { success: true, url: publicUrl };
-    } catch (error) {
-        console.error('Error uploading image:', error);
-        return { success: false, error: error.message };
+  try {
+    if (!file) {
+      return { success: false, error: 'No file provided' };
     }
+
+    // Generate unique filename
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`; // Randomized file name
+    const filePath = `covers/${fileName}`; // Path in the Supabase Storage (means this is not locally stored)
+
+    const { error: uploadError } = await supabase.storage.from('images').upload(filePath, file);
+
+    if (uploadError) {
+      console.error('Error uploading image:', uploadError);
+      return { success: false, error: uploadError.message };
+    }
+
+    // Get public URL
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from('images').getPublicUrl(filePath);
+
+    return { success: true, url: publicUrl };
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    return { success: false, error: error.message };
+  }
 }

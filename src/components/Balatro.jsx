@@ -115,7 +115,7 @@ export default function Balatro({
   pixelFilter = 745.0,
   spinEase = 1.0,
   isRotate = false,
-  mouseInteraction = true
+  mouseInteraction = true,
 }) {
   const containerRef = useRef(null);
 
@@ -131,7 +131,11 @@ export default function Balatro({
     function resize() {
       renderer.setSize(container.offsetWidth, container.offsetHeight);
       if (program) {
-        program.uniforms.iResolution.value = [gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height];
+        program.uniforms.iResolution.value = [
+          gl.canvas.width,
+          gl.canvas.height,
+          gl.canvas.width / gl.canvas.height,
+        ];
       }
     }
     window.addEventListener('resize', resize);
@@ -144,7 +148,7 @@ export default function Balatro({
       uniforms: {
         iTime: { value: 0 },
         iResolution: {
-          value: [gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height]
+          value: [gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height],
         },
         uSpinRotation: { value: spinRotation },
         uSpinSpeed: { value: spinSpeed },
@@ -158,8 +162,8 @@ export default function Balatro({
         uPixelFilter: { value: pixelFilter },
         uSpinEase: { value: spinEase },
         uIsRotate: { value: isRotate },
-        uMouse: { value: [0.5, 0.5] }
-      }
+        uMouse: { value: [0.5, 0.5] },
+      },
     });
 
     const mesh = new Mesh(gl, { geometry, program });
@@ -203,7 +207,7 @@ export default function Balatro({
     spinEase,
     isRotate,
     mouseInteraction,
-    containerRef
+    containerRef,
   ]);
 
   return <div ref={containerRef} className="w-full h-full" />;
