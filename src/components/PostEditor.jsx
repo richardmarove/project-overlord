@@ -158,9 +158,13 @@ export default function PostEditor({ postId = undefined }) {
         await logPostCreated(result.data.id, formData.title);
         setMessage({ type: 'success', text: 'Post created successfully!' });
 
-        // Redirect to edit page after creation
+        // Redirect based on publish status
         setTimeout(() => {
-          window.location.href = `/admin/posts/edit/${result.data.id}`;
+          if (postData.published) {
+            window.location.href = `/posts/${result.data.slug}`;
+          } else {
+            window.location.href = `/admin/posts/edit/${result.data.id}`;
+          }
         }, 1000);
       }
     }
@@ -217,11 +221,10 @@ export default function PostEditor({ postId = undefined }) {
       {/* Message */}
       {message.text && (
         <div
-          className={`mb-6 p-4 rounded-lg border ${
-            message.type === 'error'
+          className={`mb-6 p-4 rounded-lg border ${message.type === 'error'
               ? 'bg-red-500/10 border-red-500/30 text-red-400'
               : 'bg-green-500/10 border-green-500/30 text-green-400'
-          }`}
+            }`}
         >
           {message.text}
         </div>
