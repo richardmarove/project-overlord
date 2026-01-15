@@ -18,3 +18,6 @@ export default defineConfig({
 
   adapter: cloudflare()
 });
+
+// btw i intentionally made all the pages to be SSR
+// since i had enough with this so called blazing fast astro's SSG bullshit

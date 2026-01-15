@@ -158,9 +158,13 @@ export default function PostEditor({ postId = undefined }) {
         await logPostCreated(result.data.id, formData.title);
         setMessage({ type: 'success', text: 'Post created successfully!' });
 
-        // Redirect to edit page after creation
+        // Redirect based on publish status
         setTimeout(() => {
-          window.location.href = `/admin/posts/edit/${result.data.id}`;
+          if (postData.published) {
+            window.location.href = `/posts/${result.data.slug}`;
+          } else {
+            window.location.href = `/admin/posts/edit/${result.data.id}`;
+          }
         }, 1000);
       }
     }

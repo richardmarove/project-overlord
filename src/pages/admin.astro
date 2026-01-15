@@ -6,9 +6,6 @@ import Balatro from '../components/Balatro.jsx';
 // Server-side auth check
 const authHeader = Astro.request.headers.get('cookie');
 const hasSession = authHeader?.includes('sb-');
-
-// Note: For a more secure check, you would verify the session with Supabase on the server
-// For now, we'll rely on client-side checks in the component
 ---
 
 <Layout title="Admin Dashboard - Project Overlord" shouldPadHeader={true}>

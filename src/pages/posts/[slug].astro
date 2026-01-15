@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { supabase } from '../../lib/supabase';
 import Balatro from '../../components/Balatro.jsx';
+import { marked } from 'marked';
 
 export async function getStaticPaths() {
   const { data: posts } = await supabase.from('posts').select('slug').eq('published', true);
@@ -73,7 +74,7 @@ if (error || !post) {
         </header>
 
         <div class="prose prose-zinc prose-invert max-w-none">
-          <div set:html={post.content} />
+          <div set:html={marked.parse(post.content, { breaks: true })} />
         </div>
 
         <footer class="pt-8 border-t border-zinc-800">
