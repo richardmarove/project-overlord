@@ -221,10 +221,11 @@ export default function PostEditor({ postId = undefined }) {
       {/* Message */}
       {message.text && (
         <div
-          className={`mb-6 p-4 rounded-lg border ${message.type === 'error'
+          className={`mb-6 p-4 rounded-lg border ${
+            message.type === 'error'
               ? 'bg-red-500/10 border-red-500/30 text-red-400'
               : 'bg-green-500/10 border-green-500/30 text-green-400'
-            }`}
+          }`}
         >
           {message.text}
         </div>
