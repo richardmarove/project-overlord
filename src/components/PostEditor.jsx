@@ -249,8 +249,8 @@ export default function PostEditor({ postId = undefined }) {
       {message.text && (
         <div
           className={`mb-6 p-4 rounded-lg border ${message.type === 'error'
-              ? 'bg-red-500/10 border-red-500/30 text-red-400'
-              : 'bg-green-500/10 border-green-500/30 text-green-400'
+            ? 'bg-red-500/10 border-red-500/30 text-red-400'
+            : 'bg-green-500/10 border-green-500/30 text-green-400'
             }`}
         >
           {message.text}
@@ -407,7 +407,7 @@ export default function PostEditor({ postId = undefined }) {
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
                   disabled={saving || deleting}
-                  className="flex items-center gap-2 px-6 py-3 bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl font-semibold hover:bg-red-500/30 focus:outline-none focus:ring-2 focus:ring-red-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all mr-auto"
+                  className="flex items-center gap-2 px-6 py-3 bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl font-semibold hover:bg-red-500/30 focus:outline-none focus:ring-2 focus:ring-red-500/50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-all mr-auto"
                 >
                   <Trash2 className="w-4 h-4" />
                   Delete
@@ -417,7 +417,7 @@ export default function PostEditor({ postId = undefined }) {
               <button
                 onClick={() => handleSave(false)}
                 disabled={saving || deleting}
-                className="flex items-center gap-2 px-6 py-3 bg-white/10 text-white border border-white/20 rounded-xl font-semibold hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-white/10 text-white border border-white/20 rounded-xl font-semibold hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-all"
               >
                 {saving ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -430,7 +430,7 @@ export default function PostEditor({ postId = undefined }) {
               <button
                 onClick={() => handleSave(true)}
                 disabled={saving || deleting}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl font-semibold hover:from-blue-500 hover:to-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/25"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl font-semibold hover:from-blue-500 hover:to-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-all shadow-lg shadow-blue-500/25"
               >
                 {saving ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -455,7 +455,7 @@ export default function PostEditor({ postId = undefined }) {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="px-4 py-2 text-zinc-400 hover:text-white transition-colors"
+                className="px-4 py-2 text-zinc-400 hover:text-white cursor-pointer transition-colors"
                 disabled={deleting}
               >
                 Cancel
@@ -463,7 +463,7 @@ export default function PostEditor({ postId = undefined }) {
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 disabled:opacity-50 transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 disabled:opacity-50 cursor-pointer transition-all"
               >
                 {deleting ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
