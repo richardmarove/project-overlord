@@ -170,3 +170,46 @@ export async function uploadCoverImage(file) {
     return { success: false, error: error.message };
   }
 }
+/**
+ * Delete a post by ID
+ * @param {string} id - The post ID
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+export async function deletePost(id) {
+  try {
+    const { error } = await supabase.from('posts').delete().eq('id', id);
+
+    if (error) {
+      console.error('Error deleting post:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Get all posts
+ * @returns {Promise<{success: boolean, data?: object[], error?: string}>}
+ */
+export async function getPosts() {
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching posts:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return { success: false, error: error.message };
+  }
+}

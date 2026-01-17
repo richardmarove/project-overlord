@@ -12,6 +12,7 @@ import {
   User,
   BellRing,
   Search,
+  FileCog,
 } from 'lucide-react';
 
 export default function DashboardContent() {
@@ -218,10 +219,10 @@ export default function DashboardContent() {
                 href: '#',
               },
               {
-                icon: <ChartSpline className="w-7 h-7" />,
-                label: 'Analytics',
-                color: 'from-green-500/20 to-green-600/20',
-                href: '#',
+                icon: <FileCog className="w-7 h-7" />,
+                label: 'Edit Post',
+                color: 'from-orange-500/20 to-orange-600/20',
+                href: '/admin/posts',
               },
               {
                 icon: <BellRing className="w-7 h-7" />,
