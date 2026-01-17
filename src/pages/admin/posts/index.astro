@@ -1,0 +1,31 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PostList from '../../../components/PostList.jsx';
+import Balatro from '../../../components/Balatro.jsx';
+---
+
+<Layout title="All Posts - Project Overlord" shouldPadHeader={true}>
+  <div class="relative min-h-screen overflow-hidden">
+    <!-- Background Effect -->
+    <div class="fixed inset-0 w-full h-full bg-zinc-950 -z-10">
+      <Balatro
+        isRotate={true}
+        mouseInteraction={true}
+        pixelFilter={700}
+        spinSpeed={1.5}
+        client:load
+      />
+    </div>
+
+    <!-- Overlay -->
+    <div class="fixed inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/80 to-zinc-950 -z-10">
+    </div>
+
+    <!-- Post List -->
+    <div class="relative z-10 w-full max-w-7xl mx-auto px-4 py-8">
+      <div class="p-6 bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl">
+        <PostList client:load />
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -190,3 +190,26 @@ export async function deletePost(id) {
     return { success: false, error: error.message };
   }
 }
+
+/**
+ * Get all posts
+ * @returns {Promise<{success: boolean, data?: object[], error?: string}>}
+ */
+export async function getPosts() {
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching posts:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return { success: false, error: error.message };
+  }
+}
