@@ -4,16 +4,6 @@ import { supabase } from '../../lib/supabase';
 import Balatro from '../../components/Balatro.jsx';
 import { marked } from 'marked';
 
-export async function getStaticPaths() {
-  const { data: posts } = await supabase.from('posts').select('slug').eq('published', true);
-
-  return (
-    posts?.map((post) => ({
-      params: { slug: post.slug },
-    })) || []
-  );
-}
-
 const { slug } = Astro.params;
 
 const { data: post, error } = await supabase
