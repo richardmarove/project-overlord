@@ -6,9 +6,10 @@ import {
   updatePost,
   uploadCoverImage,
   getPostById,
+  deletePost,
 } from '../lib/postUtils';
-import { logPostCreated, logPostUpdated } from '../lib/activityLogger';
-import { Save, Send, ImagePlus, X, Loader2, Eye, EyeOff, ArrowLeft, FileText } from 'lucide-react';
+import { logPostCreated, logPostUpdated, logPostDeleted } from '../lib/activityLogger';
+import { Save, Send, ImagePlus, X, Loader2, Eye, EyeOff, ArrowLeft, FileText, Trash2 } from 'lucide-react';
 
 export default function PostEditor({ postId = undefined }) {
   const [formData, setFormData] = useState({
@@ -26,6 +27,8 @@ export default function PostEditor({ postId = undefined }) {
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
   const [previewMode, setPreviewMode] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Fetch post data if editing
   useEffect(() => {
@@ -176,6 +179,30 @@ export default function PostEditor({ postId = undefined }) {
     setSaving(false);
   };
 
+  const handleDelete = async () => {
+    if (!postId) return;
+
+    setDeleting(true);
+    setMessage({ type: '', text: '' });
+
+    const result = await deletePost(postId);
+
+    if (result.success) {
+      await logPostDeleted(postId, formData.title);
+      setMessage({ type: 'success', text: 'Post deleted successfully!' });
+
+      // Redirect to admin dashboard after deletion
+      setTimeout(() => {
+        window.location.href = '/admin';
+      }, 1000);
+    } else {
+      setMessage({ type: 'error', text: result.error || 'Failed to delete post' });
+      setDeleting(false);
+    }
+
+    setShowDeleteConfirm(false);
+  };
+
   if (loading) {
     return (
       <div className="w-full max-w-5xl mx-auto px-4 py-8">
@@ -221,11 +248,10 @@ export default function PostEditor({ postId = undefined }) {
       {/* Message */}
       {message.text && (
         <div
-          className={`mb-6 p-4 rounded-lg border ${
-            message.type === 'error'
+          className={`mb-6 p-4 rounded-lg border ${message.type === 'error'
               ? 'bg-red-500/10 border-red-500/30 text-red-400'
               : 'bg-green-500/10 border-green-500/30 text-green-400'
-          }`}
+            }`}
         >
           {message.text}
         </div>
@@ -377,9 +403,20 @@ export default function PostEditor({ postId = undefined }) {
             </label>
 
             <div className="flex items-center gap-3">
+              {postId && (
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  disabled={saving || deleting}
+                  className="flex items-center gap-2 px-6 py-3 bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl font-semibold hover:bg-red-500/30 focus:outline-none focus:ring-2 focus:ring-red-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all mr-auto"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </button>
+              )}
+
               <button
                 onClick={() => handleSave(false)}
-                disabled={saving}
+                disabled={saving || deleting}
                 className="flex items-center gap-2 px-6 py-3 bg-white/10 text-white border border-white/20 rounded-xl font-semibold hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {saving ? (
@@ -392,7 +429,7 @@ export default function PostEditor({ postId = undefined }) {
 
               <button
                 onClick={() => handleSave(true)}
-                disabled={saving}
+                disabled={saving || deleting}
                 className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl font-semibold hover:from-blue-500 hover:to-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/25"
               >
                 {saving ? (
@@ -401,6 +438,39 @@ export default function PostEditor({ postId = undefined }) {
                   <Send className="w-4 h-4" />
                 )}
                 Publish
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl">
+            <h3 className="text-xl font-bold text-white mb-2">Delete Post?</h3>
+            <p className="text-zinc-400 mb-6">
+              Are you sure you want to delete "{formData.title}"? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-4 py-2 text-zinc-400 hover:text-white transition-colors"
+                disabled={deleting}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 disabled:opacity-50 transition-all"
+              >
+                {deleting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Trash2 className="w-4 h-4" />
+                )}
+                Delete
               </button>
             </div>
           </div>
