@@ -1,16 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import {
-  LockOpen,
-  Lock,
-  ScrollText,
-  PencilLine,
-  Trash2,
-  Settings2,
-  File,
-  ClipboardList,
-  ArrowLeft,
-} from 'lucide-react';
+import { formatActivityAction, formatTimeAgo, getActivityIcon } from '../lib/dashboardUtils';
+import { ArrowLeft } from 'lucide-react';
 
 export default function FullActivityList() {
   const [activities, setActivities] = useState([]);
@@ -48,47 +39,6 @@ export default function FullActivityList() {
     loadActivities();
   }, []);
 
-  const formatActivityAction = (activity) => {
-    const actionMap = {
-      user_login: 'Logged in',
-      user_logout: 'Logged out',
-      post_created: 'Created post',
-      post_updated: 'Updated post',
-      post_deleted: 'Deleted post',
-      settings_updated: 'Updated settings',
-      file_uploaded: 'Uploaded file',
-    };
-    return actionMap[activity.action] || activity.action;
-  };
-
-  const getActivityIcon = (action) => {
-    const iconMap = {
-      user_login: <LockOpen className="w-5 h-5" />,
-      user_logout: <Lock className="w-5 h-5" />,
-      post_created: <ScrollText className="w-5 h-5" />,
-      post_updated: <PencilLine className="w-5 h-5" />,
-      post_deleted: <Trash2 className="w-5 h-5" />,
-      settings_updated: <Settings2 className="w-5 h-5" />,
-      file_uploaded: <File className="w-5 h-5" />,
-    };
-    return iconMap[action] || <ClipboardList className="w-5 h-5" />;
-  };
-
-  const formatTimeAgo = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const seconds = Math.floor((now - date) / 1000);
-
-    if (seconds < 60) return 'just now';
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes} min ago`;
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    const days = Math.floor(hours / 24);
-    if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
-    return date.toLocaleDateString();
-  };
-
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8 space-y-8">
       <div className="flex items-center gap-4">
@@ -112,7 +62,10 @@ export default function FullActivityList() {
                   className="flex items-start gap-3 p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-white/5"
                 >
                   <span className="text-xl mt-1 text-zinc-400">
-                    {getActivityIcon(activity.action)}
+                    {(() => {
+                      const Icon = getActivityIcon(activity.action);
+                      return <Icon className="w-5 h-5" />;
+                    })()}
                   </span>
                   <div className="flex-1 min-w-0">
                     <p className="text-base text-white font-medium">

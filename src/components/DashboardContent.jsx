@@ -1,16 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { formatActivityAction, formatTimeAgo } from '../lib/dashboardUtils';
+import { formatActivityAction, formatTimeAgo, getActivityIcon } from '../lib/dashboardUtils';
 import StatCard from './StatCard';
 import {
-  LockOpen,
-  Lock,
-  ScrollText,
-  PencilLine,
-  Trash2,
   Settings2,
-  File,
-  ClipboardList,
   ChartSpline,
   UsersRound,
   Baby,
@@ -129,18 +122,6 @@ export default function DashboardContent() {
   };
 
   // Helper function to get icon for activity
-  const getActivityIcon = (action) => {
-    const iconMap = {
-      user_login: <LockOpen className="w-5 h-5" />,
-      user_logout: <Lock className="w-5 h-5" />,
-      post_created: <ScrollText className="w-5 h-5" />,
-      post_updated: <PencilLine className="w-5 h-5" />,
-      post_deleted: <Trash2 className="w-5 h-5" />,
-      settings_updated: <Settings2 className="w-5 h-5" />,
-      file_uploaded: <File className="w-5 h-5" />,
-    };
-    return iconMap[action] || <ClipboardList className="w-5 h-5" />;
-  };
 
   if (loading) {
     return (
@@ -277,7 +258,12 @@ export default function DashboardContent() {
                   key={activity.id}
                   className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors"
                 >
-                  <span className="text-xl">{getActivityIcon(activity.action)}</span>
+                  <span className="text-xl">
+                    {(() => {
+                      const Icon = getActivityIcon(activity.action);
+                      return <Icon className="w-5 h-5" />;
+                    })()}
+                  </span>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-white truncate">{formatActivityAction(activity)}</p>
                     <p className="text-xs text-zinc-500">{formatTimeAgo(activity.created_at)}</p>

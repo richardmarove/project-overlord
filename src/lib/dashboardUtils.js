@@ -1,3 +1,14 @@
+import {
+  LockOpen,
+  Lock,
+  ScrollText,
+  PencilLine,
+  Trash2,
+  Settings2,
+  File,
+  ClipboardList,
+} from 'lucide-react';
+
 /**
  * Format activity action for display
  * @param {object} activity - The activity object
@@ -34,4 +45,17 @@ export const formatTimeAgo = (dateString) => {
   const days = Math.floor(hours / 24);
   if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
   return date.toLocaleDateString();
+};
+
+export const getActivityIcon = (action) => {
+  const iconMap = {
+    user_login: LockOpen,
+    user_logout: Lock,
+    post_created: ScrollText,
+    post_updated: PencilLine,
+    post_deleted: Trash2,
+    settings_updated: Settings2,
+    file_uploaded: File,
+  };
+  return iconMap[action] || ClipboardList;
 };
