@@ -9,7 +9,18 @@ import {
   deletePost,
 } from '../lib/postUtils';
 import { logPostCreated, logPostUpdated, logPostDeleted } from '../lib/activityLogger';
-import { Save, Send, ImagePlus, X, Loader2, Eye, EyeOff, ArrowLeft, FileText, Trash2 } from 'lucide-react';
+import {
+  Save,
+  Send,
+  ImagePlus,
+  X,
+  Loader2,
+  Eye,
+  EyeOff,
+  ArrowLeft,
+  FileText,
+  Trash2,
+} from 'lucide-react';
 
 export default function PostEditor({ postId = undefined }) {
   const [formData, setFormData] = useState({
@@ -248,10 +259,11 @@ export default function PostEditor({ postId = undefined }) {
       {/* Message */}
       {message.text && (
         <div
-          className={`mb-6 p-4 rounded-lg border ${message.type === 'error'
-            ? 'bg-red-500/10 border-red-500/30 text-red-400'
-            : 'bg-green-500/10 border-green-500/30 text-green-400'
-            }`}
+          className={`mb-6 p-4 rounded-lg border ${
+            message.type === 'error'
+              ? 'bg-red-500/10 border-red-500/30 text-red-400'
+              : 'bg-green-500/10 border-green-500/30 text-green-400'
+          }`}
         >
           {message.text}
         </div>
