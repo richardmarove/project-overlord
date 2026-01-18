@@ -19,7 +19,7 @@ export const POST = async ({ request, cookies }) => {
     }
 
     const maxAge = 60 * 60 * 24 * 7; // 1 week
-    const isSecure = new URL(request.url).protocol === "https:";
+    const isSecure = import.meta.env.PROD || request.headers.get("x-forwarded-proto") === "https" || new URL(request.url).protocol === "https:";
 
     cookies.set("sb-access-token", session.access_token, {
         path: "/",

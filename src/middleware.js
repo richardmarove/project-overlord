@@ -36,18 +36,21 @@ export const onRequest = defineMiddleware(async (context, next) => {
             const { session, user: refreshedUser } = refreshData;
             const maxAge = 60 * 60 * 24 * 7; // 1 week
 
+            // Determine secure flag (production, forwarded proto, or current protocol)
+            const isSecure = import.meta.env.PROD || request.headers.get("x-forwarded-proto") === "https" || url.protocol === "https:";
+
             // We use context.cookies.set for consistency with Astro middleware
             cookies.set('sb-access-token', session.access_token, {
                 path: '/',
                 maxAge,
                 sameSite: 'lax',
-                secure: url.protocol === 'https:',
+                secure: isSecure,
             });
             cookies.set('sb-refresh-token', session.refresh_token, {
                 path: '/',
                 maxAge,
                 sameSite: 'lax',
-                secure: url.protocol === 'https:',
+                secure: isSecure,
             });
 
             locals.user = refreshedUser;
