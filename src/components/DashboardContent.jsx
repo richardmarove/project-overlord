@@ -115,6 +115,11 @@ export default function DashboardContent() {
       }
 
       await supabase.auth.signOut();
+
+      // Clear cookies
+      document.cookie = 'sb-access-token=; path=/; max-age=0; SameSite=Lax; secure';
+      document.cookie = 'sb-refresh-token=; path=/; max-age=0; SameSite=Lax; secure';
+
       window.location.href = '/login';
     } catch (error) {
       console.error('Error signing out:', error);

@@ -20,6 +20,12 @@ export default function LoginForm() {
 
       if (error) throw error;
 
+      // Set cookies for server-side auth
+      const { session } = data;
+      const maxAge = 60 * 60 * 24 * 7; // 1 week
+      document.cookie = `sb-access-token=${session.access_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
+      document.cookie = `sb-refresh-token=${session.refresh_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
+
       // Log the login activity
       try {
         const { logLogin, updateLastLogin } = await import('../lib/activityLogger.js');

@@ -2,10 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import DashboardContent from '../components/DashboardContent.jsx';
 import Balatro from '../components/Balatro.jsx';
-
-// Server-side auth check
-const authHeader = Astro.request.headers.get('cookie');
-const hasSession = authHeader?.includes('sb-');
 ---
 
 <Layout title="Admin Dashboard - Project Overlord" shouldPadHeader={true}>
