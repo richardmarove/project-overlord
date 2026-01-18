@@ -8,6 +8,8 @@ interface Props {
 }
 
 const { title, description = 'A Project Overlord Blog', shouldPadHeader = false } = Astro.props;
+
+const isLoggedIn = Astro.cookies.has('sb-access-token') && Astro.cookies.has('sb-refresh-token');
 ---
 
 <!doctype html>
@@ -40,9 +42,15 @@ const { title, description = 'A Project Overlord Blog', shouldPadHeader = false 
             <li>
               <a href="/about" class="hover:text-zinc-300 transition-colors">About</a>
             </li>
-            <li id="dashboard-nav-item" style="display: none;">
-              <a href="/admin" class="hover:text-zinc-300 transition-colors">Dashboard</a>
-            </li>
+            {
+              isLoggedIn && (
+                <li>
+                  <a href="/admin" class="hover:text-zinc-300 transition-colors">
+                    Dashboard
+                  </a>
+                </li>
+              )
+            }
           </ul>
         </nav>
       </div>
@@ -57,29 +65,5 @@ const { title, description = 'A Project Overlord Blog', shouldPadHeader = false 
         &copy; {new Date().getFullYear()} Ricky Marove. All rights reserved.
       </p>
     </footer>
-
-    <script>
-      import { supabase } from '../lib/supabase';
-
-      // Check auth state and show/hide dashboard link
-      async function updateNavigation() {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        const dashboardNavItem = document.getElementById('dashboard-nav-item');
-
-        if (dashboardNavItem) {
-          dashboardNavItem.style.display = session ? 'block' : 'none';
-        }
-      }
-
-      // Update on page load
-      updateNavigation();
-
-      // Update on auth state change
-      supabase.auth.onAuthStateChange(() => {
-        updateNavigation();
-      });
-    </script>
   </body>
 </html>
