@@ -13,32 +13,17 @@ export default function LoginForm() {
     setError(null);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (error) throw error;
-
-      // Set cookies for server-side auth
-      const { session } = data;
-
-      if (!session) {
-        throw new Error('No session provided. Please check if your email is confirmed.');
-      }
-
-      const maxAge = 60 * 60 * 24 * 7; // 1 week
-      document.cookie = `sb-access-token=${session.access_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
-      document.cookie = `sb-refresh-token=${session.refresh_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
-
-      // Log the login activity
-      try {
-        const { logLogin, updateLastLogin } = await import('../lib/activityLogger.js');
-        await logLogin();
-        await updateLastLogin();
-      } catch (logError) {
-        console.error('Error logging activity:', logError);
-        // Don't block login if logging fails
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Login failed');
       }
 
       // Redirect on success

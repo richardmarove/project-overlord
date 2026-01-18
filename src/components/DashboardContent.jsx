@@ -15,111 +15,23 @@ import {
   FileCog,
 } from 'lucide-react';
 
-export default function DashboardContent() {
-  const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const [activities, setActivities] = useState([]);
-  const [totalPosts, setTotalPosts] = useState(0);
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [loading, setLoading] = useState(true);
+export default function DashboardContent({
+  user,
+  profile,
+  activities = [],
+  totalPosts = 0,
+  totalUsers = 0
+}) {
   const [signingOut, setSigningOut] = useState(false);
 
-  useEffect(() => {
-    async function loadUserData() {
-      try {
-        // Get current user session
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        const currentUser = session?.user ?? null;
-        setUser(currentUser);
+  // We no longer need internal state for data since it comes from props
+  // and we no longer need the useEffect to load data
 
-        if (currentUser) {
-          // Fetch admin profile
-          const { data: profileData, error: profileError } = await supabase
-            .from('admin_profiles')
-            .select('*')
-            .eq('id', currentUser.id)
-            .single();
-
-          if (profileError) {
-            console.error('Error fetching profile:', profileError);
-          } else {
-            setProfile(profileData);
-          }
-
-          // Fetch recent activity logs
-          const { data: activityData, error: activityError } = await supabase
-            .from('activity_logs')
-            .select('*')
-            .eq('user_id', currentUser.id)
-            .order('created_at', { ascending: false })
-            .limit(5);
-
-          if (activityError) {
-            console.error('Error fetching activities:', activityError);
-          } else {
-            setActivities(activityData || []);
-          }
-
-          // Fetch total posts count
-          const { count: postsCount, error: postsCountError } = await supabase
-            .from('posts')
-            .select('*', { count: 'exact', head: true });
-
-          if (!postsCountError) {
-            setTotalPosts(postsCount || 0);
-          } else {
-            console.error('Error fetching posts count:', postsCountError);
-          }
-
-          // Fetch total admin users count
-          const { count: usersCount, error: usersCountError } = await supabase
-            .from('admin_profiles')
-            .select('*', { count: 'exact', head: true });
-
-          if (!usersCountError) {
-            setTotalUsers(usersCount || 0);
-          } else {
-            console.error('Error fetching users count:', usersCountError);
-          }
-        }
-      } catch (error) {
-        console.error('Error loading user data:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadUserData();
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   const handleSignOut = async () => {
     setSigningOut(true);
     try {
-      // Log the logout activity before signing out
-      try {
-        const { logLogout } = await import('../lib/activityLogger.js');
-        await logLogout();
-      } catch (logError) {
-        console.error('Error logging logout:', logError);
-      }
-
-      await supabase.auth.signOut();
-
-      // Clear cookies
-      document.cookie = 'sb-access-token=; path=/; max-age=0; SameSite=Lax; secure';
-      document.cookie = 'sb-refresh-token=; path=/; max-age=0; SameSite=Lax; secure';
-
+      await fetch('/api/auth/logout', { method: 'POST' });
       window.location.href = '/login';
     } catch (error) {
       console.error('Error signing out:', error);
@@ -127,15 +39,6 @@ export default function DashboardContent() {
     }
   };
 
-  // Helper function to get icon for activity
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-spin h-12 w-12 border-4 border-white/20 border-t-white rounded-full"></div>
-      </div>
-    );
-  }
 
   if (!user) {
     return (
