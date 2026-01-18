@@ -22,6 +22,11 @@ export default function LoginForm() {
 
       // Set cookies for server-side auth
       const { session } = data;
+
+      if (!session) {
+        throw new Error('No session provided. Please check if your email is confirmed.');
+      }
+
       const maxAge = 60 * 60 * 24 * 7; // 1 week
       document.cookie = `sb-access-token=${session.access_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
       document.cookie = `sb-refresh-token=${session.refresh_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
