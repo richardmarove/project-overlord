@@ -30,6 +30,14 @@ export const supabase = {
     getSession: vi.fn(() =>
       Promise.resolve({ data: { session: { user: { id: 'mock-user-id' } } }, error: null })
     ),
+    refreshSession: vi.fn(() =>
+      Promise.resolve({ data: { user: { id: 'mock-user-id' }, session: {} }, error: null })
+    ),
+    signInWithPassword: vi.fn(() =>
+      Promise.resolve({ data: { session: { access_token: 'a', refresh_token: 'b' } }, error: null })
+    ),
+    signOut: vi.fn(() => Promise.resolve({ error: null })),
+    setSession: vi.fn(() => Promise.resolve({ error: null })),
   },
   storage: {
     from: vi.fn(() => ({
