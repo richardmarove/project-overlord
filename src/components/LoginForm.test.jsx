@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom/vitest';
 import LoginForm from './LoginForm';
 
+vi.mock('../lib/supabase');
+
 describe('LoginForm', () => {
     beforeEach(() => {
         vi.clearAllMocks();
