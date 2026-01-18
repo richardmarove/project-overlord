@@ -20,13 +20,12 @@ export default function DashboardContent({
   profile,
   activities = [],
   totalPosts = 0,
-  totalUsers = 0
+  totalUsers = 0,
 }) {
   const [signingOut, setSigningOut] = useState(false);
 
   // We no longer need internal state for data since it comes from props
   // and we no longer need the useEffect to load data
-
 
   const handleSignOut = async () => {
     setSigningOut(true);
@@ -38,7 +37,6 @@ export default function DashboardContent({
       setSigningOut(false);
     }
   };
-
 
   if (!user) {
     return (
