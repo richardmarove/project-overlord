@@ -11,6 +11,19 @@ export const POST = async ({ cookies, redirect }) => {
     });
   }
 
+  // Get user before signing out to log activity
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    await supabase.from('activity_logs').insert({
+      user_id: user.id,
+      action: 'user_logout',
+      resource_type: 'auth',
+      metadata: {
+        email: user.email,
+      },
+    });
+  }
+
   const { error } = await supabase.auth.signOut();
 
   // Always delete cookies

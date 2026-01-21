@@ -24,6 +24,7 @@ let profile: any = null;
 let activities: any[] = [];
 let totalPosts: number = 0;
 let totalUsers: number = 0;
+let recentLogins: number = 0;
 
 if (user) {
   // Fetch admin profile
@@ -54,6 +55,15 @@ if (user) {
     .from('admin_profiles')
     .select('*', { count: 'exact', head: true });
   totalUsers = usersCount || 0;
+
+  // Fetch recent logins (last 24 hours)
+  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { count: recentLoginsCount } = await supabase
+    .from('activity_logs')
+    .select('*', { count: 'exact', head: true })
+    .eq('action', 'user_login')
+    .gte('created_at', twentyFourHoursAgo);
+  recentLogins = recentLoginsCount || 0;
 }
 ---
 
@@ -83,6 +93,7 @@ if (user) {
         activities={activities as any}
         totalPosts={totalPosts}
         totalUsers={totalUsers}
+        recentLogins={recentLogins}
       />
     </div>
   </div>
