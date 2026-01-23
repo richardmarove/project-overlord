@@ -21,6 +21,7 @@ export default function DashboardContent({
   activities = [],
   totalPosts = 0,
   totalUsers = 0,
+  recentLogins = 0,
 }) {
   const [signingOut, setSigningOut] = useState(false);
 
@@ -84,8 +85,8 @@ export default function DashboardContent({
           trendValue="0.1%"
         />
         <StatCard
-          title="Recent Logins"
-          value={0}
+          title="Recent Logins (24h)"
+          value={recentLogins}
           icon={<Baby className="w-5 h-5" />}
           trend="down"
           trendValue="0%"

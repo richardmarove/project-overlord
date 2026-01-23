@@ -28,11 +28,20 @@ describe('Auth API Routes', () => {
       const mockSession = {
         access_token: 'mock-access',
         refresh_token: 'mock-refresh',
+        user: {
+          id: 'mock-user-id',
+          email: 'test@example.com',
+        },
       };
 
       vi.mocked(supabase.auth.signInWithPassword).mockResolvedValue({
         data: { session: mockSession },
         error: null,
+      });
+
+      // Mock database logging
+      supabase.from = vi.fn().mockReturnValue({
+        insert: vi.fn().mockResolvedValue({ error: null }),
       });
 
       const response = await loginPost({ request, cookies });

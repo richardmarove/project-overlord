@@ -43,5 +43,21 @@ export const POST = async ({ request, cookies }) => {
     maxAge: maxAge,
   });
 
+  // Log the login activity
+  if (session?.user) {
+    try {
+      await supabase.from('activity_logs').insert({
+        user_id: session?.user?.id,
+        action: 'user_login',
+        resource_type: 'auth',
+        metadata: {
+          email: session?.user?.email,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to log login activity:', error);
+    }
+  }
+
   return new Response(JSON.stringify({ success: true }), { status: 200 });
 };
