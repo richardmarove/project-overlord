@@ -23,6 +23,8 @@ export default function DashboardContent({
   totalUsers = 0,
   recentLogins = 0,
   apiResponseTime = '0 ms',
+  apiResponseTrend,
+  apiResponseTrendValue,
 }) {
   const [signingOut, setSigningOut] = useState(false);
 
@@ -96,8 +98,8 @@ export default function DashboardContent({
           title="API Response Time"
           value={apiResponseTime}
           icon={<Check className="w-5 h-5" />}
-          trend="up"
-          trendValue="0.3%"
+          trend={apiResponseTrend}
+          trendValue={apiResponseTrendValue}
         />
       </div>
 

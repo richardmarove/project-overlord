@@ -26,6 +26,8 @@ let totalPosts: number = 0;
 let totalUsers: number = 0;
 let recentLogins: number = 0;
 let apiResponseTime: string = '0 ms';
+let apiResponseTrend: 'up' | 'down' | undefined = undefined;
+let apiResponseTrendValue: string = '0%';
 
 if (user) {
   const startTime = performance.now();
@@ -76,17 +78,31 @@ if (user) {
         if (error) console.error('Error logging metric:', error);
       });
 
-    // Fetch the average of the last 10 entries for a more stable metric
+    // Fetch the average of the last 10 entries for a more stable metric,
+    // and the 10 before that to calculate a trend.
     const { data: metricsData } = await supabase
       .from('system_metrics')
       .select('value')
       .eq('metric_name', 'api_response_time')
       .order('created_at', { ascending: false })
-      .limit(10);
+      .limit(20);
 
     if (metricsData && metricsData.length > 0) {
-      const avg = metricsData.reduce((acc, curr) => acc + curr.value, 0) / metricsData.length;
-      apiResponseTime = `${Math.round(avg)} ms`;
+      const currentWindow = metricsData.slice(0, 10);
+      const previousWindow = metricsData.slice(10, 20);
+
+      const currentAvg =
+        currentWindow.reduce((acc, curr) => acc + curr.value, 0) / currentWindow.length;
+      apiResponseTime = `${Math.round(currentAvg)} ms`;
+
+      if (previousWindow.length > 0) {
+        const previousAvg =
+          previousWindow.reduce((acc, curr) => acc + curr.value, 0) / previousWindow.length;
+        const percentChange = ((currentAvg - previousAvg) / previousAvg) * 100;
+
+        apiResponseTrendValue = `${Math.abs(percentChange).toFixed(1)}%`;
+        apiResponseTrend = percentChange > 0 ? 'down' : 'up'; // Inverted because higher latency is "down/bad"
+      }
     } else {
       apiResponseTime = `${duration} ms`;
     }
@@ -124,6 +140,8 @@ if (user) {
         totalUsers={totalUsers}
         recentLogins={recentLogins}
         apiResponseTime={apiResponseTime}
+        apiResponseTrend={apiResponseTrend}
+        apiResponseTrendValue={apiResponseTrendValue}
       />
     </div>
   </div>
