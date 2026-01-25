@@ -66,17 +66,21 @@ if (user) {
     const endTime = performance.now();
     const duration = Math.round(endTime - startTime);
 
-    // Async log the metric (don't await to avoid blocking render)
-    supabase
-      .from('system_metrics')
-      .insert({
+    // Async log the metric and cleanup old logs (don't await to avoid blocking render)
+    Promise.all([
+      supabase.from('system_metrics').insert({
         metric_name: 'api_response_time',
         value: duration,
         unit: 'ms',
-      })
-      .then(({ error }) => {
-        if (error) console.error('Error logging metric:', error);
-      });
+      }),
+      supabase
+        .from('system_metrics')
+        .delete()
+        .lt('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
+    ]).then(([insertRes, deleteRes]) => {
+      if (insertRes.error) console.error('Error logging metric:', insertRes.error);
+      if (deleteRes.error) console.error('Error cleaning up metrics:', deleteRes.error);
+    });
 
     // Fetch the average of the last 10 entries for a more stable metric,
     // and the 10 before that to calculate a trend.
