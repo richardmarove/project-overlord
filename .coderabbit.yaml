@@ -1,0 +1,4 @@
+# CodeRabbit configuration to disable auto-review
+reviews:
+  auto_review:
+    enabled: false
